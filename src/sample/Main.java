@@ -19,18 +19,22 @@ import javafx.stage.Stage;
 import sample.Database;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Main extends Application {
 
     private Label errorLabel;
 
     private Scene listScene;
-    private Scene printScene;
 
     private Button listButton;
     private Button printButton;
     private Button submitButton;
 
+
+    private TextField voornaam;
+    private TextField achternaam;
+    private TextField nummer;
     private TextField sjoelbak;
     private TextField tonspel;
     private TextField toptafel;
@@ -43,22 +47,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
         submitButton = createButton("Submit");
         listButton = createButton("Lijst");
         printButton = createButton("Printen");
         errorLabel = createPointsLabel("");
         errorLabel.setTextFill(Color.RED);
 
-        try{
-            Database database = new Database();
-            database.connect();
-        } catch (SQLException e){
-            errorLabel.setText("Database error: " + e.getMessage());
-        }
+        Database database = new Database();
 
 
         BorderPane ListRoot = new BorderPane();
-
 
         HBox hboxForTopBorder = createHBox(
                 Colors.TOP,
@@ -70,7 +69,23 @@ public class Main extends Application {
         vbox.getChildren().add(submitButton);
 
         submitButton.setOnAction( (event) -> {
-            System.out.println(sjoelbak.getText());
+            try{
+                User user = new User(
+                        voornaam.getText(),
+                        achternaam.getText(),
+                        Integer.parseInt(nummer.getText()),
+                        Integer.parseInt(sjoelbak.getText()),
+                        Integer.parseInt(tonspel.getText()),
+                        Integer.parseInt(toptafel.getText()),
+                        Integer.parseInt(rolbiljart.getText()),
+                        Integer.parseInt(mannetjesspel.getText()));
+
+                this.clearTextFields(voornaam, achternaam, nummer, sjoelbak, tonspel, toptafel, rolbiljart, mannetjesspel);
+
+                database.insertScore(user);
+            } catch (SQLException e){
+                errorLabel.setText("Database error: " + e.getMessage());
+            }
         });
 
         ListRoot.setTop(hboxForTopBorder);
@@ -85,7 +100,28 @@ public class Main extends Application {
 
     }
 
+    private void clearTextFields( TextField ... fields){
+        for( TextField tf : fields ){
+            tf.setText("");
+        }
+    }
+
     private VBox getLabelsAndTextFields(){
+        HBox hboxNummer = createHBox(
+                Colors.CENTER,
+                createPointsLabel("Nummer"),
+                nummer = createTextField()
+        );
+        HBox hboxVoornaam = createHBox(
+                Colors.CENTER,
+                createPointsLabel("Voornaam"),
+                voornaam = createTextField()
+        );
+        HBox hboxAchternaam = createHBox(
+                Colors.CENTER,
+                createPointsLabel("Achternaam"),
+                achternaam = createTextField()
+        );
         HBox hboxSjoelbak = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Sjoelbak"),
@@ -113,6 +149,9 @@ public class Main extends Application {
         );
 
         return createVBox(
+                hboxNummer,
+                hboxVoornaam,
+                hboxAchternaam,
                 hboxSjoelbak,
                 hboxTonspel,
                 hboxToptafel,
