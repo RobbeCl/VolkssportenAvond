@@ -22,6 +22,13 @@ public class Main extends Application {
 
     private Button listButton;
     private Button printButton;
+    private Button submitButton;
+
+    private TextField sjoelbak;
+    private TextField tonspel;
+    private TextField toptafel;
+    private TextField rolbiljart;
+    private TextField mannetjesspel;
 
     private enum Colors{
         TOP, CENTER
@@ -41,12 +48,12 @@ public class Main extends Application {
                 printButton
         );
 
-        listButton.setOnAction( (event) -> {
-            primaryStage.setScene(listScene);
-        });
-
         VBox vbox = getLabelsAndTextFields();
-        vbox.getChildren().add(createButton("Submit"));
+        vbox.getChildren().add(submitButton = createButton("Submit"));
+
+        submitButton.setOnAction( (event) -> {
+            System.out.println(sjoelbak.getText());
+        });
 
         ListRoot.setTop(hboxForTopBorder);
         ListRoot.setCenter(vbox);
@@ -63,27 +70,27 @@ public class Main extends Application {
         HBox hboxSjoelbak = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Sjoelbak"),
-                createTextField()
+                sjoelbak = createTextField()
         );
         HBox hboxTonspel = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Tonspel"),
-                createTextField()
+                tonspel = createTextField()
         );
         HBox hboxToptafel = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Toptafel"),
-                createTextField()
+                toptafel = createTextField()
         );
         HBox hboxRolBiljart = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Rol Biljart"),
-                createTextField()
+                rolbiljart = createTextField()
         );
         HBox hboxMannetjesspel = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Mannetjesspel"),
-                createTextField()
+                mannetjesspel = createTextField()
         );
 
         return createVBox(
