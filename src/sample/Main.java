@@ -12,10 +12,17 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import sample.Database;
+
+import java.sql.SQLException;
+
 public class Main extends Application {
+
+    private Label errorLabel;
 
     private Scene listScene;
     private Scene printScene;
@@ -36,11 +43,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        submitButton = createButton("Submit");
+        listButton = createButton("Lijst");
+        printButton = createButton("Printen");
+        errorLabel = createPointsLabel("");
+        errorLabel.setTextFill(Color.RED);
+
+        try{
+            Database database = new Database();
+            database.connect();
+        } catch (SQLException e){
+            errorLabel.setText("Database error: " + e.getMessage());
+        }
+
 
         BorderPane ListRoot = new BorderPane();
 
-        listButton = createButton("Lijst");
-        printButton = createButton("Printen");
 
         HBox hboxForTopBorder = createHBox(
                 Colors.TOP,
@@ -49,7 +67,7 @@ public class Main extends Application {
         );
 
         VBox vbox = getLabelsAndTextFields();
-        vbox.getChildren().add(submitButton = createButton("Submit"));
+        vbox.getChildren().add(submitButton);
 
         submitButton.setOnAction( (event) -> {
             System.out.println(sjoelbak.getText());
@@ -57,6 +75,7 @@ public class Main extends Application {
 
         ListRoot.setTop(hboxForTopBorder);
         ListRoot.setCenter(vbox);
+        ListRoot.setBottom(errorLabel);
 
         listScene = new Scene(ListRoot, 800, 600);
 
