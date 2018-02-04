@@ -17,30 +17,44 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public enum Colors{
+    private Scene listScene;
+    private Scene printScene;
+
+    private Button listButton;
+    private Button printButton;
+
+    private enum Colors{
         TOP, CENTER
     }
-
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        BorderPane root = new BorderPane();
+        BorderPane ListRoot = new BorderPane();
+
+        listButton = createButton("Lijst");
+        printButton = createButton("Printen");
+
         HBox hboxForTopBorder = createHBox(
                 Colors.TOP,
-                createTopButton("Lijst"),
-                createTopButton("Printen")
+                listButton,
+                printButton
         );
-        root.setTop(hboxForTopBorder);
+
+        listButton.setOnAction( (event) -> {
+            primaryStage.setScene(listScene);
+        });
 
         VBox vbox = getLabelsAndTextFields();
+        vbox.getChildren().add(createButton("Submit"));
 
-        root.setCenter(vbox);
+        ListRoot.setTop(hboxForTopBorder);
+        ListRoot.setCenter(vbox);
 
-        Scene scene = new Scene(root, 800, 600);
+        listScene = new Scene(ListRoot, 800, 600);
 
         primaryStage.setTitle("Volkssporten Applicatie");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(listScene);
         primaryStage.show();
 
     }
@@ -101,7 +115,7 @@ public class Main extends Application {
         return vbox;
     }
 
-    private Button createTopButton(String title){
+    private Button createButton(String title){
         Button button = new Button(title);
         button.setPrefSize(100, 20);
         return button;
