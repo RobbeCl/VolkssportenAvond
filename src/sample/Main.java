@@ -46,35 +46,38 @@ public class Main extends Application {
     }
 
     private VBox getLabelsAndTextFields(){
-        HBox hboxTopbiljard = createHBox(
+        HBox hboxSjoelbak = createHBox(
                 Colors.CENTER,
-                createPointsLabel("biljard"),
+                createPointsLabel("Sjoelbak"),
                 createTextField()
         );
-        HBox hboxMannetjesSpel = createHBox(
+        HBox hboxTonspel = createHBox(
                 Colors.CENTER,
-                createPointsLabel("Mannetjesspel"),
+                createPointsLabel("Tonspel"),
                 createTextField()
         );
-        HBox hbox = createHBox(
+        HBox hboxToptafel = createHBox(
                 Colors.CENTER,
-                createPointsLabel("Mannetjesspel"),
+                createPointsLabel("Toptafel"),
                 createTextField()
         );
-        HBox hboxMannetjesSpel = createHBox(
+        HBox hboxRolBiljart = createHBox(
                 Colors.CENTER,
-                createPointsLabel("Mannetjesspel"),
+                createPointsLabel("Rol Biljart"),
                 createTextField()
         );
-        HBox hboxMannetjesSpel = createHBox(
+        HBox hboxMannetjesspel = createHBox(
                 Colors.CENTER,
                 createPointsLabel("Mannetjesspel"),
                 createTextField()
         );
 
         return createVBox(
-                hboxTopbiljard,
-                hboxMannetjesSpel
+                hboxSjoelbak,
+                hboxTonspel,
+                hboxToptafel,
+                hboxRolBiljart,
+                hboxMannetjesspel
         );
     }
 
