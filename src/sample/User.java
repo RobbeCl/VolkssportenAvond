@@ -36,4 +36,8 @@ public class User {
         return sql;
     }
 
+    public static String getAllUsers(){
+       return "select * from scores";
+    }
+
 }

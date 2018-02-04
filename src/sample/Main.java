@@ -7,19 +7,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import sample.Database;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Observable;
 
 public class Main extends Application {
 
@@ -41,6 +40,8 @@ public class Main extends Application {
     private TextField rolbiljart;
     private TextField mannetjesspel;
 
+    private ListView<User> users;
+
     private enum Colors{
         TOP, CENTER
     }
@@ -54,8 +55,15 @@ public class Main extends Application {
         errorLabel = createPointsLabel("");
         errorLabel.setTextFill(Color.RED);
 
+        users = new ListView<User>();
+
         Database database = new Database();
 
+        try{
+            users.getItems().addAll(database.getUsers());
+        } catch (SQLException e){
+            this.setError("Database error: " + e.getMessage());
+        }
 
         BorderPane ListRoot = new BorderPane();
 
@@ -84,13 +92,14 @@ public class Main extends Application {
 
                 database.insertScore(user);
             } catch (SQLException e){
-                errorLabel.setText("Database error: " + e.getMessage());
+                this.setError("Database error: " + e.getMessage());
             }
         });
 
         ListRoot.setTop(hboxForTopBorder);
         ListRoot.setCenter(vbox);
         ListRoot.setBottom(errorLabel);
+        ListRoot.setRight(users);
 
         listScene = new Scene(ListRoot, 800, 600);
 
@@ -98,6 +107,10 @@ public class Main extends Application {
         primaryStage.setScene(listScene);
         primaryStage.show();
 
+    }
+
+    private void setError(String error){
+        errorLabel.setText(error);
     }
 
     private void clearTextFields( TextField ... fields){
@@ -190,11 +203,14 @@ public class Main extends Application {
         Label lb = new Label(label);
         lb.setFont(new Font(15));
         lb.setPadding(new Insets(5));
+        lb.setMinWidth(150);
         return lb;
     }
 
     private TextField createTextField(){
-        return new TextField();
+        TextField tf = new TextField();
+        tf.setMinWidth(280);
+        return tf;
     }
 
 
